@@ -1,190 +1,169 @@
-
-
-# nums = [2,7,11,15]
-# nums2 = [6,5,154,13]
-# for i in enumerate(nums,)
-# for j in nums2:
-#     print(i,j)
-outer_counter = 0
-for i in range(3):
-    outer_counter = outer_counter + 1
-    inner_counter = 0
-    for j in range(3):
-        inner_counter = inner_counter + 1
-        # print(f"Value will go to Box {outer_counter} is we use outer counter")
-        print(f"Value will go to Box {inner_counter} is we use inner counter")
-
-
-
-# nums = [0,1,2,3,4,5,6,7]
-# axis = 3
-# nums.extend(nums[:axis])
-# del nums[:axis]
-# print(nums)
+# arr = [16,17,4,3,5,2]
+# largest_value = -1
 #
-# sum =
-# list_1 = [[],[],[]]
-# list_1[0].append(2)
-# list_1[1].append(3)
-# list_1[2].append(4)
-# print(list_1)
-# grand_total = 0
-# for i in range(1,10):
-#     sub_total = 0
-#     for j in range(1,5):
-#         add = i+j 1 + 1, 1 + 2, 1 + 3, 1 + 4 = 46
-#         grand_total = grand_total + add
-#         sub_total = sub_total + add
-#         list_1.append(add)
-#     print("Sub total: ", sub_total)
+# for i in range(len(arr) - 1, -1, -1):
+#     temp = arr[i]
+#     arr[i] = largest_value
+#     largest_value = max(largest_value, temp)
+# print(arr)
+import joblib
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix
+import pandas as pd
+import preprocess_kgptalkie as ps
+import re
+def get_clean(x):
+    x = str(x).lower().replace('\\', '').replace('_', ' ')
+    # x = ps.cont_exp(x)
+    # x = ps.remove_emails(x)
+    # x = ps.remove_urls(x)
+    # x = ps.remove_html_tags(x)
+    # x = ps.remove_rt(x)
+    # x = ps.remove_accented_chars(x)
+    # x = ps.remove_special_chars(x)
+    # x = re.sub("(.)\\1{2,}", "\\1", x)
+    return x
+df = pd.read_excel("rr.xlsx")
+df.dropna(inplace=True)
+# df = df[df['Review'].apply(lambda x: not (pd.isnull(x) or x.strip().isdigit()))]
 
+
+# Separate features and target variable
+df["Review"] = df["Review"].apply(lambda x: get_clean(x))
+X = df["Review"]
+# X = get_clean(X)
+y = df["impact"]
+# print(df.isnull().sum())
+# print(df[df["impact"].isnull()])
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a text vectorizer
+vectorizer = TfidfVectorizer(stop_words='english', max_features=5000)
+
+# Fit and transform the training data
+X_train_vectorized = vectorizer.fit_transform(X_train)
+
+# Transform the testing data
+X_test_vectorized = vectorizer.transform(X_test)
+print("X_Train shape is : ",X_train.shape)
+print("X_Train_Vectorized shape is : ",X_train_vectorized.shape)
+# Train a Decision Tree classifier
+model = DecisionTreeClassifier()
+model.fit(X_train_vectorized, y_train)
+# joblib.dump(model,'reviews_classification.joblib')
+
+# Make predictions on the test set
+predictions = model.predict(X_test_vectorized)
 #
-# print("Grand Total: ",grand_total)
-# print("List of sum of each iteration pair: ", list_1)
-
-
-
-
-
-
-# nums = [2,7,11,15]
-# target = 9
-# for i in nums:
-#     for j in nums:
-#         if int(nums[i]) + 3
-# abc
-# ab
-# abd
-# acd
-# bcd
-# counter = 0
-# for i in range(1,11):
-#     counter = counter + 1
-#     print(counter-1)
-    # for j in range(1,11):
-        # print(f' {i} x {j} = {i*j}')
-
-# sets = ["a","b","c","d"]
-# ab ac ad bc bd cd
-
-# while True:
-#     print("Sentiment analysis is inprogress")
+# # Evaluate the model
+accuracy = accuracy_score(y_test, predictions)
+conf_matrix = confusion_matrix(y_test, predictions)
 #
-#     average_polarity = 0.2
-#     average_subjectivity = 0.5
+print("Accuracy:", accuracy)
+print("Confusion Matrix:")
+print(conf_matrix)
+
+
+
+# from sklearn.model_selection import train_test_split
+# # from sklearn.linear_model import LogisticRegression
+# from sklearn.naive_bayes import MultinomialNB
+# from sklearn.metrics import accuracy_score, confusion_matrix
+# from sklearn.preprocessing import LabelEncoder
+# from sklearn.feature_extraction.text import CountVectorizer
+# import pandas as pd
 #
-#     if average_polarity > 0.5:
-#         print("Continue the process")
-#     else:
-#         continue
+# # Read a smaller subset of the data
+# df = pd.read_excel("health.xlsx", nrows=1000)
+#
+# # Rest of the code remains the same
+# X_text = df.drop("Medication", axis=1)
+# y = df["Medication"]
+#
+# X_combined = X_text.apply(lambda row: ' '.join(map(str, row)), axis=1)
+# vectorizer = CountVectorizer(stop_words='english')
+# X_vectorized = vectorizer.fit_transform(X_combined)
+#
+label_encoder = LabelEncoder()
+y_encoded = label_encoder.fit_transform(y)
+#
+# X_train, X_test, y_train, y_test = train_test_split(X_vectorized, y_encoded, test_size=0.2, random_state=42)
+#
+# # Use Logistic Regression for quicker testing
+# # model = LogisticRegression(random_state=42)
+# model = MultinomialNB()
+# model.fit(X_train, y_train)
+#
+# prediction = model.predict(X_test)
+#
+# accuracy = accuracy_score(y_test, prediction)
+# conf_matrix = confusion_matrix(y_test, prediction)
+#
+# print("Accuracy:", accuracy)
+# print("Confusion Matrix:")
+# print(conf_matrix)
+
+
+
+
+
+
+
+# from sklearn.model_selection import train_test_split
+# from sklearn.ensemble import RandomForestClassifier
+# from sklearn.metrics import accuracy_score, confusion_matrix
+# import joblib
+# from sklearn.preprocessing import LabelEncoder
+# from sklearn.feature_extraction.text import CountVectorizer
+# from sklearn.naive_bayes import MultinomialNB
+# import pandas as pd
+# df = pd.read_excel("health.xlsx")
+# X = df.drop("Medication", axis=1)
+# y = df["Medication"]
+# X_text = X.apply(lambda row: ' '.join(map(str, row)), axis=1)
+# vectorizer = CountVectorizer(stop_words='english')
+# X_vectorized  = vectorizer.fit_transform(X_text)
+# label_encoder = LabelEncoder()
+# y_encoded = label_encoder.fit_transform(y)
+#
+# X_train, X_test, y_train, y_test = train_test_split(X_vectorized, y_encoded, test_size=0.2, random_state=42)
 #
 #
-#     user_choice = int(input("Do you want to continue? Press 1 to continue: "))
-#     if user_choice != 1:
-#         break
-
-
-
-
-
-# TASKS of FOR LOOP
-# Task # 1 : calculate the sum of the numbers from 1 to 10 (Using For Loop)
-# sum=0
-# for i in range(1,11):
-#     sum=sum+i
-# print(sum)
-# Task # 2 : print the multiplication table for the number input by the user (Using For Loop)
-# number=int(input("enter number"))
-# for i in range(1,11):
-#     product=i*number
-#     # print(str(i)+"x"+str(number)+"="+ str(product))
-#     print(f'{number} x {i} = {product}')
-
-
-
-# Task # 3 : calculate the factorial of the number input by the user (Using For Loop)
-# number=int(input("enter number"))
-# product=number
-# for i in reversed(range(1,number)):
-#     product=product*i
-# print(product)
-
-# str = "abc"
-# print(str[1])
-
-# Task # 4 : count the vowels in the string input by the user (Using For Loop)
-# string=input('enter string')
-# count=0
-# vowel="AEIOUaeiou"
-# for i in string:
-#     if i in vowel:
-#         count=count+1
-# print(count)
-
-
-# Task # 5 : Print even numbers from 1 to 10 (Using For Loop)
-# for i in range(1,11):
-#     if i%2==0:
-#         print(i)
-
-
-
-
-
-# def sentiment_analysis():
-#     average_polarity = 0.2
-#     average_subjectivity = 0.5
-#     return {"polarity":average_polarity,"subjectivity":average_subjectivity}
+# model = MultinomialNB()
+# model.fit(X_train,y_train)
+# prediction = model.predict(X_test)
+# accuracy = accuracy_score(y_test,prediction)
 #
-# sentiment = sentiment_analysis()
-# if
-# sum=0
-# for i in range(1,5):
-#     sum=sum+i
-#     print(sum)
-
-# l1 = [22,32,33,43,55,65,77,87]
-# l2 = ["Value1","Value2","Value3","Value4","Value5","Value6"]
-# new_list = []
-# for i in range(0,len(l1)):
-#     if l1[i]%2==0:
-#         new_list.append(l1[i])
-#         l1.remove(l1[i])
-# print(new_list)
-# print(l1)
-
-# for i in l1:
-#     if i%2==0:
-#         new_list.append(i)
-#         l1.remove(i)
-# print(new_list)
-# print(l1)
-# del l1[1]
-# del l2[1]
+# conf_matrix = confusion_matrix(y_test,prediction)
+# print(accuracy)
+# print(conf_matrix)
 #
-# l1.remove(43)
-# l2.remove("Value2")
+# pd.set_option('display.max_columns', None)
+# df = pd.read_excel("stress.xlsx")
+
+
+# X = df.drop("stress_level", axis=1)
+# y = df["stress_level"]
 #
-# l1.pop(3)
-# l2.pop(4)
+# X_train, X_test,  y_train, y_test = train_test_split(X,y, test_size=0.2, random_state=42)
 #
-# l1.append(99)
-# l2.append("Value7")
+# model = RandomForestClassifier()
+# model.fit(X_train, y_train)
+# joblib.dump(model,'stress_classifier_model.joblib')
+# print("Our model is trained and saved in our PC")
 
-# print(l1)
-# print(l2)
+# loaded_model = joblib.load("stress_classifier_model.joblib")
+# prediction = loaded_model.predict(X_test)
+# accuracy = accuracy_score(y_test,prediction)
+# print(accuracy)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# prediction = loaded_model.predict([[21,0,1,27,5,3,0,5,5,0,0,0,0,5,0,5,0,5,0,5]])
+# print(prediction)
+# column_ranges = df.describe().loc[["min","max"]]
+# print(column_ranges)
+# print(df.loc[[])

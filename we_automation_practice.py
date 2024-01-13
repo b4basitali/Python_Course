@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from skimage import morphology, filters
 import time
-from textblob import TextBlob
+from text_blob import TextBlob
 # analysis = TextBlob("i love this video")
 # print(analysis.sentiment.polarity, analysis.sentiment.subjectivity)
 
