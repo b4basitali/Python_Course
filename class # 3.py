@@ -1,3 +1,50 @@
+# =========
+import python_functions as p
+
+p.add(10,15)
+
+import math
+import random
+import turtle
+
+# res = math.pow(4,2)
+# print(16**(1/2))
+# res = math.sqrt(16)
+# print(res)
+# res = math.ceil(1.6)
+# print(res)
+# res = math.floor(1.6)
+# print(res)
+# res = math.ceil(2.1)
+# print(res)
+#
+# res = math.ceil((random.random()) * 100)
+# print(res)
+#
+# res = random.randrange(1,100)
+# print(res)
+
+res = random.choice(["Ahmed","Kazim","Abdullah"])
+print(res)
+num_list = [1,2,3,4,5,6]
+random.shuffle(num_list)
+print(num_list)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # TASKS of NESTED FOR LOOP
 # Task # 1 : Write a program that prints a square pattern using nested for loops.
 # The program should prompt the user for the side length of the square.
@@ -55,8 +102,6 @@
 #         else:
 #             print(" ", end=" ")
 #     print()
-def abc(x):
-    if
 
 # rows = 5
 # for i in range(1,rows+1):

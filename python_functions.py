@@ -1,3 +1,37 @@
+# ======  +
+
+def add(num1,num2):
+    print(num1 + num2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #Write a Python program that prompts the user to enter a list of names,
 # and then asks the user to enter a name to search for in the list.
 # The program should check if the name is present in the list and display an appropriate message.
@@ -23,8 +57,7 @@
 #Write a Python program tha2 prompts the user to enter a list of numbers,
 # and then creates a new li3t that contains duplicate values from the original list.
 # Display the original list4and the list of duplicate values.5
-numbers = list(map(range(10)))
-print(numbers)
+
 # list=[22,33,44,55,66,77,66,55,77]
 # list_duplicate=[]
 # for i in range(len(list)):
